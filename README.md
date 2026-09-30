@@ -23,7 +23,8 @@ Successfully integrated the dynamic physiological model (breathing + heartbeat) 
 ### Phase 2 Simulation Result: Phase Extraction
 The following figure demonstrates the successful extraction of vital signs from the 60 GHz FMCW radar echo over a 10-second slow-time observation window:
 
-<img width="1428" height="712" alt="image" src="https://github.com/user-attachments/assets/278a4c81-9fc6-4f39-a005-9448aba681e0" />
+<img width="1048" height="684" alt="image" src="https://github.com/user-attachments/assets/861a6795-0148-4c02-b812-677ed55d5163" />
+
 
 
 **Signal Analysis:**
