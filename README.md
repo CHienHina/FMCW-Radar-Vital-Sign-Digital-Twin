@@ -23,8 +23,8 @@ Successfully integrated the dynamic physiological model (breathing + heartbeat) 
   ### Phase 2 Simulation Result: Phase Extraction
 The following figure demonstrates the successful extraction of vital signs from the 60 GHz FMCW radar echo over a 10-second slow-time observation window:
 
-![Extracted Vital Sign Phase](<img width="1428" height="712" alt="image" src="https://github.com/user-attachments/assets/278a4c81-9fc6-4f39-a005-9448aba681e0" />
-)
+<img width="1428" height="712" alt="image" src="https://github.com/user-attachments/assets/278a4c81-9fc6-4f39-a005-9448aba681e0" />
+
 
 **Signal Analysis:**
 * **Low-Frequency Component (Respiration):** The large macroscopic oscillations (ranging from approximately -13 to 13 radians) clearly reflect the simulated 0.3 Hz breathing displacement.
