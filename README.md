@@ -35,3 +35,6 @@ The following figure demonstrates the successful extraction of vital signs from 
 
 ## Next Step (下一步挑戰): Phase 3
 Real-world vehicle cabins are not perfectly stationary. The next objective is to inject vehicle vibration noise (simulating IMU error states) into the displacement model, and develop an **Extended Kalman Filter (EKF)** or apply Machine Learning techniques to robustly separate the vital signs from heavy environmental interference.
+
+<img width="1386" height="1066" alt="image" src="https://github.com/user-attachments/assets/550c570e-d2c6-4fb0-9c02-5d6612fa3821" />
+
