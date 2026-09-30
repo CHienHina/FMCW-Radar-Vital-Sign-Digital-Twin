@@ -33,8 +33,29 @@ The following figure demonstrates the successful extraction of vital signs from 
 * **High-Frequency Ripples (Heartbeat):** The subtle micro-variations superimposed on the main waveform accurately represent the 1.2 Hz heartbeat displacement (amplitude ~0.5 mm).
 * **DSP Validation:** This result validates the Range FFT and phase unwrapping pipeline, successfully transforming raw IF beat signals (Data Cube) into a clean, continuous physiological phase variation graph.
 
-## Next Step (下一步挑戰): Phase 3
-Real-world vehicle cabins are not perfectly stationary. The next objective is to inject vehicle vibration noise (simulating IMU error states) into the displacement model, and develop an **Extended Kalman Filter (EKF)** or apply Machine Learning techniques to robustly separate the vital signs from heavy environmental interference.
+## Current Progress (目前進度): Phase 3 - Noise Injection & Signal Recovery
+To simulate a realistic in-cabin environment, severe vehicle vibrations and random Gaussian noise were injected into the digital twin's displacement model. The raw extracted phase was heavily corrupted, making vital signs indistinguishable.
 
+We implemented Digital Signal Processing (DSP) **Bandpass Filters** to isolate specific frequency bands:
+* **Breathing Band:** 0.15 Hz - 0.5 Hz
+* **Heartbeat Band:** 0.8 Hz - 2.0 Hz
+
+**Phase 3 Results:**
 <img width="1386" height="1066" alt="image" src="https://github.com/user-attachments/assets/550c570e-d2c6-4fb0-9c02-5d6612fa3821" />
+
+
+
+
+**Signal Analysis & DSP Performance:**
+* **Raw Phase (Top):** The original radar phase is heavily distorted by simulated large-amplitude vehicle swaying and high-frequency random noise. The vital signs are completely submerged.
+* **Respiration Recovery (Middle):** Applying a 0.15 - 0.5 Hz bandpass filter successfully eliminates the vehicle sway, revealing a clean 0.3 Hz breathing waveform.
+* **Heartbeat Recovery (Bottom):** A subsequent 0.8 - 2.0 Hz bandpass filter accurately isolates the much weaker 1.2 Hz heartbeat signal from both the dominant respiration wave and the environmental noise.
+* **Conclusion:** This effectively demonstrates the robustness of the DSP pipeline in separating micro-vital signs from severe in-cabin mechanical interference.
+
+The DSP pipeline successfully suppressed the high-amplitude vehicle sway and high-frequency noise, accurately recovering both the respiration and heartbeat waveforms from the corrupted Data Cube.
+
+## Next Step (下一步挑戰): Phase 4
+Explore Machine Learning techniques (e.g., SVM, Random Forest) to automatically classify the passenger's physiological state based on the extracted, filtered features, moving from signal extraction to intelligent state recognition.
+
+
 
