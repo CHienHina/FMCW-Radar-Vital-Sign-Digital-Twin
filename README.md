@@ -20,7 +20,7 @@ Successfully integrated the dynamic physiological model (breathing + heartbeat) 
 * Constructed a Radar Data Cube by collecting beat signals (IF signals) across multiple chirps.
 * Applied Range FFT and phase unwrapping algorithms to successfully extract the underlying physiological phase variations from the 0.8m range bin.
 
-  ### Phase 2 Simulation Result: Phase Extraction
+### Phase 2 Simulation Result: Phase Extraction
 The following figure demonstrates the successful extraction of vital signs from the 60 GHz FMCW radar echo over a 10-second slow-time observation window:
 
 <img width="1428" height="712" alt="image" src="https://github.com/user-attachments/assets/278a4c81-9fc6-4f39-a005-9448aba681e0" />
