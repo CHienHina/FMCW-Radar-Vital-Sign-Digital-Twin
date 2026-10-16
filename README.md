@@ -73,18 +73,14 @@ Using Welch's Power Spectral Density (PSD) estimate, the dominant breathing and 
 **Feature Space Distribution:**
 
 
-<img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/bfa098c7-bc13-4d66-acdc-b780dbd6a1c8" />
-
-
-
-<img width="600" alt="Feature Space" src="https://github.com/user-attachments/assets/8e54f7b0-58e4-409f-b458-3def99f21a6f" />
+<img width="618" height="730" alt="image" src="https://github.com/user-attachments/assets/7f1f44e4-73c7-4fd9-9fd0-1580e525d360" />
 
 
 
 **Classification Confusion Matrix:**
 
 
-<img width="600" alt="Confusion Matrix"  src="https://github.com/user-attachments/assets/fbb094ff-e07b-4cdd-a883-d236954b4373" />
+<img width="636" height="692" alt="image" src="https://github.com/user-attachments/assets/6359ec5f-41f3-4087-aebc-c184779cfd37" />
 
 
 
@@ -103,9 +99,9 @@ To solve this, we implemented **Spatial Filtering via MIMO Beamforming**, direct
 ### Phase 5 Results: Spatial Filtering Validation
 We simulated a 4-element Uniform Linear Array (ULA) operating at 60 GHz. The infant was positioned at a 15-degree angle relative to the radar. Heavy environmental noise was injected to mask the 1.5mm chest displacements.
 
-*(Note: Upload the before/after Beamforming comparison plot here)*
 
-<img width="800" alt="Beamforming Comparison" src="[請貼上波束成形對比圖的 GitHub 圖片連結]" />
+<img width="988" height="618" alt="image" src="https://github.com/user-attachments/assets/7085ac0b-aae6-48d1-b236-64bf33030e19" />
+
 
 **Engineering Insights:**
 *   **Before Beamforming (Top):** The single-antenna setup failed to isolate the baby's micro-movements. The extracted phase (grey) is entirely dominated by environmental clutter, validating the drop in Phase 4's ML accuracy.
