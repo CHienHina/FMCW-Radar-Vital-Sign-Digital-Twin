@@ -73,6 +73,10 @@ Using Welch's Power Spectral Density (PSD) estimate, the dominant breathing and 
 **Feature Space Distribution:**
 
 
+<img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/bfa098c7-bc13-4d66-acdc-b780dbd6a1c8" />
+
+
+
 <img width="600" alt="Feature Space" src="https://github.com/user-attachments/assets/8e54f7b0-58e4-409f-b458-3def99f21a6f" />
 
 
