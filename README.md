@@ -80,7 +80,7 @@ Using Welch's Power Spectral Density (PSD) estimate, the dominant breathing and 
 **Classification Confusion Matrix:**
 
 
-<img width="636" height="692" alt="image" src="https://github.com/user-attachments/assets/6359ec5f-41f3-4087-aebc-c184779cfd37" />
+<img width="618" height="692" alt="image" src="https://github.com/user-attachments/assets/6359ec5f-41f3-4087-aebc-c184779cfd37" />
 
 
 
