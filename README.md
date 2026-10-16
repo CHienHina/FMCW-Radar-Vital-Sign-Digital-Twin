@@ -91,7 +91,7 @@ Using Welch's Power Spectral Density (PSD) estimate, the dominant breathing and 
 *   **Future Work Roadmap:** This simulation directly validates the necessity of our upcoming upgrades. To reliably detect infants in moving vehicles, we must move beyond basic bandpass filtering. Our next steps include integrating an **Extended Kalman Filter (EKF)** for dynamic noise tracking and exploring **MIMO Beamforming** to spatially isolate the target and enhance the Signal-to-Clutter Ratio (SCR).
 
 
-## Current Progress: Phase 5 - MIMO Beamforming for Extreme Edge Cases
+## Current Progress: Phase 5 - MIMO Beamforming for Extreme Edge Cases (original)
 In Phase 4, the Digital Twin engine revealed a critical edge case: the micro-vital signs of an infant (Child Presence Detection - CPD) were easily masked by low-frequency vehicle vibrations when relying on a single-antenna DSP pipeline, leading to reduced ML classification accuracy.
 
 To solve this, we implemented **Spatial Filtering via MIMO Beamforming**, directly aligning with the project's primary goal of developing an "SCR-guided Adaptive Beamforming Algorithm".
@@ -107,3 +107,21 @@ We simulated a 4-element Uniform Linear Array (ULA) operating at 60 GHz. The inf
 *   **Before Beamforming (Top):** The single-antenna setup failed to isolate the baby's micro-movements. The extracted phase (grey) is entirely dominated by environmental clutter, validating the drop in Phase 4's ML accuracy.
 *   **After 4-Antenna Beamforming (Bottom):** By steering the virtual beam to exactly 15 degrees and applying Maximum Ratio Combining (MRC), the system successfully suppressed off-axis noise. The beamformed phase (blue) almost perfectly reconstructs the ground-truth infant vital signs (red).
 *   **Conclusion:** This phase successfully demonstrates that transitioning from Single-Input Single-Output (SISO) to a MIMO architecture with adaptive beamforming is mathematically required to guarantee 99%+ reliability for critical safety applications like CPD in vibrating vehicles.
+
+## Current Progress: Phase 5 - Spatial-Frequency Separation & Lightweight Edge AI (new)
+In response to real-world embedded system constraints (where heavy multi-antenna hardware arrays and high-complexity algorithms like DR-MUSIC are infeasible for SoC deployment), we redesigned Phase 5 around **Lightweight Spatial-Frequency Separation**.
+
+### 1. Spatial Distance Binning (Range Gating)
+Instead of complex hardware beamforming, we utilize the radar's inherent **Range FFT distance resolution** to logically partition the cabin into discrete spatial bins (e.g., Adult at 0.7m, Infant/CPD at 1.2m). This decouples multi-passenger signals and prevents cross-talk without extra antenna cost.
+
+### 2. Lightweight Feature Extraction for AI
+By combining spatial distance gating with efficient IIR bandpass filtering, the system isolates individual vital spectrum features (breathing/heartbeat frequency and phase variance) and feeds them directly into the lightweight **Random Forest Classifier**, maintaining high edge-computing efficiency.
+
+
+
+<img width="1600" height="1000" alt="image" src="https://github.com/user-attachments/assets/26dfb17b-28dd-4cd1-b93b-a8bd5b29dba8" />
+
+
+**Engineering Insights:**
+*   **Before Separation (Top):** The raw signal at the infant's range bin is severely corrupted by vehicle sway and spatial overlap.
+*   **After Range Binning & DSP (Bottom):** Logical spatial isolation combined with targeted bandpass filtering successfully extracts the micro-vital features, enabling robust AI state diagnosis while satisfying automotive SoC power and resource constraints.
