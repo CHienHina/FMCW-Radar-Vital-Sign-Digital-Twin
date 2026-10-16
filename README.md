@@ -14,7 +14,7 @@ This project simulates a 60 GHz FMCW radar system for detecting passenger vital 
 ## Result (模擬結果)
 <img width="1684" height="1032" alt="image" src="https://github.com/user-attachments/assets/22fc08ea-361a-48c1-aa8b-0dcfa926211f" />
 
-## Current Progress (目前進度): Phase 2 
+## Current Progress: Phase 2 
 Successfully integrated the dynamic physiological model (breathing + heartbeat) with the FMCW radar simulation. 
 * Implemented a slow-time observation loop (100 fps over 10 seconds).
 * Constructed a Radar Data Cube by collecting beat signals (IF signals) across multiple chirps.
@@ -33,7 +33,7 @@ The following figure demonstrates the successful extraction of vital signs from 
 * **High-Frequency Ripples (Heartbeat):** The subtle micro-variations superimposed on the main waveform accurately represent the 1.2 Hz heartbeat displacement (amplitude ~0.5 mm).
 * **DSP Validation:** This result validates the Range FFT and phase unwrapping pipeline, successfully transforming raw IF beat signals (Data Cube) into a clean, continuous physiological phase variation graph.
 
-## Current Progress (目前進度): Phase 3 - Noise Injection & Signal Recovery
+## Current Progress: Phase 3 - Noise Injection & Signal Recovery
 To simulate a realistic in-cabin environment, severe vehicle vibrations and random Gaussian noise were injected into the digital twin's displacement model. The raw extracted phase was heavily corrupted, making vital signs indistinguishable.
 
 We implemented Digital Signal Processing (DSP) **Bandpass Filters** to isolate specific frequency bands:
