@@ -84,10 +84,11 @@ Using Welch's Power Spectral Density (PSD) estimate, the dominant breathing and 
 
 
 
-**Performance Analysis:**
-*   **High Separability:** The feature space plot demonstrates that the DSP pipeline effectively separates the micro-vital signs into distinct clusters despite severe simulated noise.
-*   **Diagnostic Accuracy:** The Random Forest model achieved near-perfect classification accuracy across all states. The system can robustly differentiate between a stressed driver and a left-behind infant based solely on 60 GHz FMCW radar echoes.
-*   **Conclusion:** The integration of the Physics-informed Digital Twin, DSP filtering, and Machine Learning establishes a complete, robust pipeline for next-generation intelligent in-cabin monitoring and safety systems.
+**Performance Analysis & Sim2Real Insights:**
+*   **High Separability for Adult States:** The model achieved near 100% accuracy in distinguishing between 'Normal' and 'Stress' states. The feature space plot demonstrates that the DSP pipeline effectively separates these micro-vital signs into distinct clusters despite severe simulated environmental noise.
+*   **Edge Case Discovery (Baby/CPD Limitation):** The confusion matrix reveals a drop in classification accuracy for the 'Baby(CPD)' class. This accurately reflects a real-world physical challenge: an infant's chest displacement is extremely small (amplitude ~1.5 mm). When subjected to the injected low-frequency vehicle sway (amplitude ~10 mm), the infant's micro-vital signs are heavily submerged by the noise, causing the basic FFT feature extraction to struggle.
+*   **The Value of the Digital Twin:** This "imperfect" result is exactly why the Digital Twin methodology is crucial. Rather than discovering this failure during a dangerous real-world deployment, our virtual environment safely exposed this critical corner case (High Noise vs. Low Signal Amplitude). 
+*   **Future Work Roadmap:** This simulation directly validates the necessity of our upcoming upgrades. To reliably detect infants in moving vehicles, we must move beyond basic bandpass filtering. Our next steps include integrating an **Extended Kalman Filter (EKF)** for dynamic noise tracking and exploring **MIMO Beamforming** to spatially isolate the target and enhance the Signal-to-Clutter Ratio (SCR).
 
 
 
