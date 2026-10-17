@@ -100,7 +100,8 @@ To resolve the Phase 4 CPD failure and decouple multiple passengers within SoC c
 
 ### Phase 5 Results: Time-Domain Recovery & Vital Spectrum Separation
 
-<img width="1100" alt="Phase 5 Beamforming and Vital Spectrum Separation" src="[請貼上修正後無重疊的新版 Phase 5 圖片連結]" />
+<img width="2352" height="1140" alt="image" src="https://github.com/user-attachments/assets/c3ef9b19-2f0e-4b8c-90cf-ab41ba48a2d3" />
+
 
 **Engineering & Physical Insights:**
 - **1A. Before Beamforming (Top-Left):** Without spatial steering, the received phase (grey) is heavily corrupted by cross-talk from the adult driver (-20°, 5 mm breathing) and vehicle vibrations, failing to track the infant's 1.5 mm ground-truth waveform (red).
