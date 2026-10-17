@@ -20,6 +20,7 @@ Built upon a **Physics-Informed Digital Twin (Software-in-the-Loop, SIL)** archi
 Generated a 60 GHz FMCW chirp waveform (Bandwidth = 4 GHz, yielding a range resolution of ΔR ≈ 3.75 cm) and applied manual Fast-Time **Range FFT** to accurately localize a static human target positioned at 0.8 m inside the cabin.
 
 ### Phase 1 Simulation Result: Range Profile
+
 <img width="1684" height="1032" alt="Phase 1 Range FFT" src="https://github.com/user-attachments/assets/22fc08ea-361a-48c1-aa8b-0dcfa926211f" />
 
 ---
@@ -50,6 +51,7 @@ We implemented dual **IIR Bandpass Filters** to isolate specific physiological f
 - **Heartbeat Band:** 0.8 Hz - 2.0 Hz
 
 ### Phase 3 Results: Noise Suppression & Waveform Recovery
+
 <img width="1386" height="1066" alt="Phase 3 DSP Filtering" src="https://github.com/user-attachments/assets/550c570e-d2c6-4fb0-9c02-5d6612fa3821" />
 
 **Signal Analysis & DSP Performance:**
@@ -75,9 +77,11 @@ To overcome the scarcity and ethical risks of collecting extreme real-world data
 Rather than training AI models solely on spatial point clouds, our AI processing chain computes **Welch's Power Spectral Density (PSD)** on the filtered phase signals to extract **Vital Spectrum Features** (dominant respiration/heartbeat spectral peaks and energy distribution). These features are fed into a lightweight **Random Forest Classifier**.
 
 **Feature Space Distribution:**
+
 <img width="618" height="730" alt="Feature Space" src="https://github.com/user-attachments/assets/7f1f44e4-73c7-4fd9-9fd0-1580e525d360" />
 
 **Classification Confusion Matrix:**
+
 <img width="618" height="692" alt="Confusion Matrix" src="https://github.com/user-attachments/assets/6359ec5f-41f3-4087-aebc-c184779cfd37" />
 
 **Performance Analysis & Sim2Real Insights:**
@@ -95,6 +99,7 @@ To resolve the Phase 4 CPD failure and decouple multiple passengers within SoC c
 2. **Multi-Passenger Vital Spectrum Decoupling:** By extracting the slow-time physiological phase exclusively from the steered +15° spatial bin, the infant's weak micro-vital spectrum is cleanly separated from the adult's respiration clutter and fed into the PSD feature extractor.
 
 ### Phase 5 Results: Time-Domain Recovery & Vital Spectrum Separation
+
 <img width="1100" alt="Phase 5 Beamforming and Vital Spectrum Separation" src="[請貼上修正後無重疊的新版 Phase 5 圖片連結]" />
 
 **Engineering & Physical Insights:**
