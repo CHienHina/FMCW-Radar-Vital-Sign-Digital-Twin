@@ -81,13 +81,6 @@ Rather than training AI models solely on spatial point clouds, our AI processing
 <img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/526cc831-9743-4500-8675-0a24f845284d" />
 
 
-<img width="618" height="730" alt="Feature Space" src="https://github.com/user-attachments/assets/7f1f44e4-73c7-4fd9-9fd0-1580e525d360" />
-
-
-
-<img width="618" height="692" alt="Confusion Matrix" src="https://github.com/user-attachments/assets/6359ec5f-41f3-4087-aebc-c184779cfd37" />
-
-
 ### Performance Analysis & Sim2Real Insights
 
 - **Robust Validation:** To ensure generalized performance and avoid data leakage, the Random Forest classifier was evaluated using **5-Fold Cross-Validation**.
