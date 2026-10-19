@@ -76,21 +76,24 @@ To overcome the scarcity and ethical risks of collecting extreme real-world data
 ### 2. Vital Spectrum Feature Extraction & ML Classification Results
 Rather than training AI models solely on spatial point clouds, our AI processing chain computes **Welch's Power Spectral Density (PSD)** on the filtered phase signals to extract **Vital Spectrum Features** (dominant respiration/heartbeat spectral peaks and energy distribution). These features are fed into a lightweight **Random Forest Classifier**.
 
-**Feature Space Distribution:**
+**Feature Space Distribution & Classification Confusion Matrix:**
 
 <img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/526cc831-9743-4500-8675-0a24f845284d" />
 
 
 <img width="618" height="730" alt="Feature Space" src="https://github.com/user-attachments/assets/7f1f44e4-73c7-4fd9-9fd0-1580e525d360" />
 
-**Classification Confusion Matrix:**
+
 
 <img width="618" height="692" alt="Confusion Matrix" src="https://github.com/user-attachments/assets/6359ec5f-41f3-4087-aebc-c184779cfd37" />
 
-**Performance Analysis & Sim2Real Insights:**
-- **High Separability for Adult States:** The model achieved **96.2% (51/53)** accuracy for `Normal` and **100% (51/51)** accuracy for `Stress` (white off-diagonal cells indicate zero false positives). The feature space plot confirms that adult vital signs form distinct, well-separated clusters.
-- **Edge Case Discovery (`Baby/CPD` Limitation):** Classification accuracy dropped to **47.8% (22/46)** for the `Baby(CPD)` class, with 24 samples misclassified as adult states. Physically, because an infant's chest displacement (1.5 mm) is minuscule compared to vehicle sway (10 mm) and ambient cabin clutter, an unsteered single-channel receiver allows full-cabin noise and multi-passenger cross-talk to hijack the spectral peak finder.
-- **The Value of the Digital Twin:** Instead of discovering this fatal CPD blind spot during real-vehicle deployment, our SIL Digital Twin safely exposed the physical boundary of unsteered 1D frequency filtering, directly motivating our Phase 5 spatial beamforming architecture.
+
+### Performance Analysis & Sim2Real Insights
+
+- **Robust Validation:** To ensure generalized performance and avoid data leakage, the Random Forest classifier was evaluated using **5-Fold Cross-Validation**.
+- **High Separability for Adult States:** The model achieved **94.3% (50/53)** accuracy for Normal and **98.0% (50/51)** accuracy for Stress. The feature space plot confirms that adult vital signs form distinct, well-separated clusters, proving the effectiveness of the Welch PSD feature extraction.   
+- **Edge Case Discovery (Baby/CPD Limitation):** Classification accuracy dropped to **47.8% (22/46)** for the Baby(CPD) class, with 24 samples misclassified as adult states. Physically, because an infant's chest displacement (1.5 mm) is minuscule compared to vehicle sway (10 mm) and ambient cabin clutter, an unsteered single-channel receiver allows full-cabin noise and multi-passenger cross-talk to hijack the spectral peak finder.   
+- **The Value of the Digital Twin:** Instead of discovering this fatal CPD blind spot during real-vehicle deployment, our SIL Digital Twin safely exposed the physical boundary of unsteered 1D frequency filtering, directly motivating our **Phase 5 spatial beamforming architecture**.
 
 ---
 
