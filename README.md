@@ -78,6 +78,9 @@ Rather than training AI models solely on spatial point clouds, our AI processing
 
 **Feature Space Distribution:**
 
+<img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/526cc831-9743-4500-8675-0a24f845284d" />
+
+
 <img width="618" height="730" alt="Feature Space" src="https://github.com/user-attachments/assets/7f1f44e4-73c7-4fd9-9fd0-1580e525d360" />
 
 **Classification Confusion Matrix:**
