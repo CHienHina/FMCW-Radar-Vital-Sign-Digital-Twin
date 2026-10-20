@@ -4,11 +4,12 @@ This project simulates a **60 GHz FMCW Radar System** for non-contact passenger 
 
 Built upon a **Physics-Informed Digital Twin (Software-in-the-Loop, SIL)** architecture, this repository implements the complete signal and AI processing pipeline—from millimeter-wave physical modeling and interference suppression to **Targeted Digital Beamforming** for multi-passenger spectrum separation and **Vital Spectrum Feature-Driven Machine Learning**.
 
-## Key Features & System Design Philosophy (核心功能與設計理念)
-- **60 GHz FMCW Physical Twin & Data Cube:** Simulates chirp waveform generation, free-space/in-cabin propagation, Fast-Time Range FFT, and Slow-Time sub-millimeter physiological phase extraction ($\Delta \phi(t) = \frac{4\pi x(t)}{\lambda}$).
-- **Automotive SoC-Friendly Architecture (No Heavy DR-MUSIC):** High-complexity super-resolution algorithms (such as DR-MUSIC) require heavy eigenvalue decomposition that exceeds embedded automotive SoC limits. This project replaces heavy spectral estimators with **lightweight IIR filtering, spatial beamforming, and AI-driven noise suppression**.
-- **AI Processing Chain Beyond Point Clouds:** Rather than relying solely on spatial radar point clouds (which cannot distinguish a static doll from a breathing infant), our pipeline integrates **Vital Spectrum Feature Extraction (Welch PSD)** with lightweight Machine Learning and closed-loop observation window control.
-- **Spatial Beamforming for Multi-Passenger Spectrum Separation:** Steers virtual beams toward specific seat coordinates to decouple overlapping vital spectra from multiple passengers and suppress off-axis vehicle vibrations.
+## Key Features
+- **60 GHz FMCW physical twin:** beat-signal radar model, fast-time range FFT, slow-time phase extraction and unwrapping (Δφ(t) = 4πx(t)/λ).
+- **Domain-randomized synthetic data:** randomized noise, vehicle sway amplitude/frequency and component phases; three passenger states (Normal, Stress, Baby/CPD).
+- **Spectral-feature classification:** Welch PSD peaks, energy ratio and peak quality fed to bagged decision trees; BR/HR estimation errors reported in bpm.
+- **Measurement-driven window control:** the observation window extends from 10 s to 15 s when the measured heartbeat-band peak quality is low.
+- **Spatial filtering exploration:** 4-RX array simulation with conventional and null-steering beamforming.
 
 ## Tools & Environment (使用工具與環境)
 - **MATLAB (R2026b)**
@@ -41,6 +42,7 @@ The following figure demonstrates the successful extraction of vital signs from 
 - **High-Frequency Ripples (Heartbeat):** The subtle micro-variations superimposed on the main respiration wave accurately capture the 1.2 Hz heartbeat displacement (amplitude ≈ 0.5 mm).
 - **DSP Validation:** Validates the core Range FFT and phase unwrapping backbone, transforming raw IF beat signals into a continuous physiological phase signature.
 
+The target appears in the 0.7875 m range bin (bin width 3.75 cm). Phase is extracted from that bin and unwrapped.
 ---
 
 ## Current Progress: Phase 3 - Vehicle Vibration Injection & DSP Recovery (車體顛簸雜訊注入與頻帶分離)
@@ -78,14 +80,32 @@ Rather than training AI models solely on spatial point clouds, our AI processing
 
 **Feature Space Distribution & Classification Confusion Matrix:**
 
-<img width="1600" height="800" alt="image" src="https://github.com/user-attachments/assets/526cc831-9743-4500-8675-0a24f845284d" />
+<img width="2000" height="840" alt="image" src="https://github.com/user-attachments/assets/3c4553bb-db75-4eaf-b0f2-9b95f5d7d5de" />
 
 
-### Performance Analysis & Sim2Real Insights
+### Evaluation
+5-fold cross-validation on 150 synthetic samples, repeated over 10 random seeds (mean ± std). Two factors are compared: the Welch setting (MATLAB default vs. full-length window with a fine frequency grid) and the feature set (frequencies only vs. frequencies + energy ratio + peak quality).
 
-- **Robust Validation:** To ensure generalized performance and avoid data leakage, the Random Forest classifier was evaluated using **5-Fold Cross-Validation**.
-- **High Separability for Adult States:** The model achieved **94.3% (50/53)** accuracy for Normal and **98.0% (50/51)** accuracy for Stress. The feature space plot confirms that adult vital signs form distinct, well-separated clusters, proving the effectiveness of the Welch PSD feature extraction.   
-- **Edge Case Discovery (Baby/CPD Limitation):** Classification accuracy dropped to **47.8% (22/46)** for the Baby(CPD) class, with 24 samples misclassified as adult states. Physically, because an infant's chest displacement (1.5 mm) is minuscule compared to vehicle sway (10 mm) and ambient cabin clutter, an unsteered single-channel receiver allows full-cabin noise and multi-passenger cross-talk to hijack the spectral peak finder.   
+| Welch | Features | Normal | Stress | Baby (CPD) |
+|---|---|---|---|---|
+| default | frequencies | 95.6 ± 2.8% | 98.8 ± 1.8% | 58.8 ± 8.2% |
+| default | + energy | 95.6 ± 2.6% | 87.1 ± 6.5% | 80.5 ± 4.5% |
+| fine | frequencies | 96.3 ± 2.1% | 87.4 ± 4.9% | 84.6 ± 5.1% |
+| fine | + energy | 98.6 ± 1.3% | 95.3 ± 2.0% | 95.9 ± 1.8% |
+
+### BR/HR estimation (fine Welch, mean absolute error in bpm / share within ±5%)
+| Class | BR | HR |
+|---|---|---|
+| Normal | 0.69 / 67% | 0.37 / 100% |
+| Stress | 0.63 / 98% | 0.30 / 100% |
+| Baby (CPD) | 2.04 / 86% | 10.16 / 82% |
+
+### Observations
+- With the default `pwelch` settings the frequency grid is about 0.39 Hz for 10 s windows (0.195 Hz for 15 s), so the breathing rates of the three states fall into the same bin. A finer grid and two energy-based features raise the Baby class from 58.8% to 95.9% in this simulation.
+- The first single-run result (47.8%) is within the spread of the default setting (58.8 ± 8.2%).
+- Infant heart rate remains the weakest estimate (heartbeat 0.2 mm vs. 0.5–1.5 mm injected noise).
+- The infant is low-amplitude by construction in the generator, so energy features help here; this must be validated on real data.
+- The window extension is triggered by a quality index measured from the signal (peak-to-median power ratio in the heartbeat band over the first 10 s, threshold 12).
 - **The Value of the Digital Twin:** Instead of discovering this fatal CPD blind spot during real-vehicle deployment, our SIL Digital Twin safely exposed the physical boundary of unsteered 1D frequency filtering, directly motivating our **Phase 5 spatial beamforming architecture**.
 
 ---
@@ -97,10 +117,22 @@ To resolve the Phase 4 CPD failure and decouple multiple passengers within SoC c
 1. **Seat-Specific Spatial Beam Steering:** Utilizing a standard 4-RX automotive antenna array (λ/2 spacing), the system steers a spatial beam toward the specific seat coordinate of the infant (+15°) while placing a spatial null toward the strong interfering adult driver (-20°).
 2. **Multi-Passenger Vital Spectrum Decoupling:** By extracting the slow-time physiological phase exclusively from the steered +15° spatial bin, the infant's weak micro-vital spectrum is cleanly separated from the adult's respiration clutter and fed into the PSD feature extractor.
 
-### Phase 5 Results: Time-Domain Recovery & Vital Spectrum Separation
 
-<img width="2352" height="1140" alt="image" src="https://github.com/user-attachments/assets/c3ef9b19-2f0e-4b8c-90cf-ab41ba48a2d3" />
+## Phase 5 - Spatial Filtering Exploration
+Two occupants share one range bin (infant at +15°, adult at -20°); a 4-RX array (λ/2 spacing) receives phase-modulated returns with per-element complex noise. Seat angles are assumed known within 2°. Phase is extracted with `unwrap(angle(.))` and band-pass filtered, over 30 noise realizations.
 
+<img width="2352" height="1176" alt="image" src="https://github.com/user-attachments/assets/9df611bf-ad45-4d08-a273-06ce96920679" />
+
+
+| Method | Phase RMSE (rad) | BR within ±5% | HR within ±5% |
+|---|---|---|---|
+| single antenna | 8.11 | 0% | 0% |
+| conventional beamforming | 1.67 | 90% | 53% |
+| null toward adult | 1.28 | 93% | 93% |
+
+- A single antenna follows the stronger adult occupant.
+- Conventional beamforming moves the dominant peak to the infant's breathing but leaves adult leakage; nulling toward the adult reduces it, at the cost of needing the adult's direction.
+- Echo amplitudes, noise level and the 2° angle error are assumptions; this is an illustration, not a performance claim.
 
 **Engineering & Physical Insights:**
 - **1A. Before Beamforming (Top-Left):** Without spatial steering, the received phase (grey) is heavily corrupted by cross-talk from the adult driver (-20°, 5 mm breathing) and vehicle vibrations, failing to track the infant's 1.5 mm ground-truth waveform (red).
@@ -111,10 +143,16 @@ To resolve the Phase 4 CPD failure and decouple multiple passengers within SoC c
 
 ---
 
-## Gap Analysis & Future Roadmap (現狀與計畫目標差距及未來展望)
+## Candidate Directions (not yet decided) & Future Roadmap (現狀與計畫目標差距及未來展望)
 To bridge this SIL prototype with the final 2-year NYCU × Whetron industrial project goals (WP1–WP4), our upcoming development focuses on four key upgrades:
 
 1. **Multi-Seat Automated Beam Scanning:** Expand fixed-angle steering to automated 2D Range-Angle FFT + CFAR detection, dynamically steering multiple digital beams to simultaneously isolate and monitor ≥ 2 passengers across all cabin seats.
 2. **Enhanced AI Noise Suppression with Full Spectral Features:** Move beyond simple spectral peak-picking by feeding full **vital spectrum envelopes, spectral entropy, variance, and time-frequency representations** into lightweight neural networks (1D-CNN / MLP) and harmonic comb filters, enabling the AI model to directly learn and suppress residual motion artifacts and breathing harmonics on edge SoCs.
 3. **Multi-Sensor Fusion (Camera + Radar + IMU) for 3–5 Min Early Warning:** Integrate cabin optical camera cues (head pose, eyelid closure PERCLOS) with 60 GHz radar physiological trends (Heart Rate Variability - HRV and respiratory rhythm shifts) alongside onboard IMU vibration compensation. This multi-modal AI fusion aims to achieve **3 to 5 minutes of early warning** prior to severe driver drowsiness or acute cardiopulmonary events.
 4. **Real-Vehicle HIL & Hybrid Twin Calibration:** Connect this unified MATLAB processing pipeline to Whetron's 60 GHz radar hardware I/Q data cube and ECG ground truth (< 10 ms timestamp alignment) to calibrate the Level 2/3 cabin multipath digital twin.
+
+## Limitations
+- Simulation only; no real radar data.
+- Noise is injected in the phase domain and assumes ideal phase unwrapping (about 1.3–3.8 rad rms per sample for 0.5–1.5 mm noise would break unwrapping on a real chain).
+- Single-frequency vehicle sway; no body motion, breathing harmonics, or multipath.
+- Infant parameters (rates, amplitudes) are assumed; compute cost on target hardware not measured.
